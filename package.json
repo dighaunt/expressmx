@@ -1,0 +1,32 @@
+{
+  "name": "expressmx",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "mobile:clear": "turbo run dev:clear --filter=@expressmx/mobile-client --filter=@expressmx/mobile-provider",
+    "mobile:tunnel": "turbo run dev:tunnel --filter=@expressmx/mobile-client --filter=@expressmx/mobile-provider",
+    "mobile:tunnel:reset": "rm -rf .turbo node_modules/.cache apps/*/.expo && pnpm mobile:tunnel",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "format": "prettier --write \"**/*.{ts,tsx}\"",
+    "db:apply-schema": "psql \"$DATABASE_URL\" -v ON_ERROR_STOP=1 -f schema.sql"
+  },
+  "devDependencies": {
+    "turbo": "^2.3.3",
+    "prettier": "^3.4.2",
+    "typescript": "^5.7.3"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "packageManager": "pnpm@9.15.0",
+  "pnpm": {
+    "overrides": {
+      "@types/react": "^19.2.14",
+      "@types/react-dom": "^19.2.3",
+      "lightningcss": "1.30.1"
+    }
+  }
+}

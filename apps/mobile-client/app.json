@@ -1,0 +1,58 @@
+{
+  "expo": {
+    "name": "ExpressMX",
+    "slug": "expressmx-client",
+    "scheme": "expressmx",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.cris.expressmx.client",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "ExpressMX usa tu ubicación mientras usas la app para validar direcciones de servicio."
+      }
+    },
+    "android": {
+      "package": "com.expressmx.client",
+      "softwareKeyboardLayoutMode": "pan",
+      "permissions": [
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION"
+      ]
+    },
+    "plugins": [
+      "expo-font",
+      "expo-router",
+      "expo-secure-store",
+      "expo-system-ui",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "ExpressMX usa tu ubicación mientras usas la app para validar direcciones de servicio."
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "color": "#2563EB",
+          "defaultChannel": "default",
+          "sounds": [],
+          "enableBackgroundRemoteNotifications": false
+        }
+      ],
+      "react-native-maps"
+    ],
+    "experiments": {
+      "typedRoutes": false
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "c924934c-ba06-4106-8f28-552e2fa6b035"
+      }
+    },
+    "owner": "gayasthindi"
+  }
+}

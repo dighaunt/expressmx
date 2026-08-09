@@ -1,0 +1,71 @@
+{
+  "expo": {
+    "name": "ExpressMX Prestador",
+    "slug": "expressmx-provider",
+    "scheme": "expressmx-provider",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.expressmx.provider",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false,
+        "NSCameraUsageDescription": "ExpressMX usa la cámara para que documentes el estado del servicio antes y después.",
+        "NSPhotoLibraryUsageDescription": "ExpressMX accede a tus fotos para adjuntarlas como evidencia del servicio.",
+        "NSLocationWhenInUseUsageDescription": "ExpressMX usa tu ubicación mientras usas la app para mostrar rutas hacia el cliente."
+      }
+    },
+    "android": {
+      "package": "com.expressmx.provider",
+      "softwareKeyboardLayoutMode": "pan",
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION"
+      ]
+    },
+    "plugins": [
+      "expo-font",
+      "expo-router",
+      "expo-secure-store",
+      "expo-system-ui",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "ExpressMX usa tu ubicación mientras usas la app para mostrar rutas hacia el cliente."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "cameraPermission": "ExpressMX usa la cámara para que documentes el estado del servicio antes y después.",
+          "photosPermission": "ExpressMX accede a tus fotos para adjuntarlas como evidencia del servicio."
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "color": "#2563EB",
+          "defaultChannel": "provider-orders",
+          "sounds": [
+            "./assets/sounds/notification.wav"
+          ],
+          "enableBackgroundRemoteNotifications": false
+        }
+      ],
+      "react-native-maps"
+    ],
+    "experiments": {
+      "typedRoutes": false
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "0b70b202-aa0c-4f2f-8164-8cbfce62782c"
+      }
+    },
+    "owner": "gayasthindi"
+  }
+}

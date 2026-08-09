@@ -1,0 +1,128 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 9.15.0
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm turbo run typecheck lint
+        env:
+          TURBO_TELEMETRY_DISABLED: 1
+
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: test
+          POSTGRES_USER: test
+          POSTGRES_DB: expressmx_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 9.15.0
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
+      - name: Apply schema
+        run: psql postgresql://test:test@localhost:5432/expressmx_test -f schema.sql
+      - run: pnpm turbo run test
+        env:
+          DATABASE_URL: postgresql://test:test@localhost:5432/expressmx_test
+          JWT_SECRET: ci-test-secret-min-32-chars-long-enough
+          NODE_ENV: test
+          TURBO_TELEMETRY_DISABLED: 1
+
+  build:
+    runs-on: ubuntu-latest
+    needs: [quality]
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 9.15.0
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm turbo run build
+        env:
+          DATABASE_URL: postgresql://placeholder
+          JWT_SECRET: build-time-placeholder-min-32-chars
+          TURBO_TELEMETRY_DISABLED: 1
+
+  e2e:
+    if: false
+    runs-on: ubuntu-latest
+    needs: [build]
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: test
+          POSTGRES_USER: test
+          POSTGRES_DB: expressmx_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 9.15.0
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
+      - name: Apply schema
+        run: psql postgresql://test:test@localhost:5432/expressmx_test -f schema.sql
+      - name: Install Playwright browsers
+        run: pnpm --filter @expressmx/web e2e:install
+      - name: Run Playwright tests
+        run: pnpm --filter @expressmx/web e2e
+        env:
+          DATABASE_URL: postgresql://test:test@localhost:5432/expressmx_test
+          JWT_SECRET: ci-test-secret-min-32-chars-long-enough
+          E2E_ADMIN_AVAILABLE: '1'
+          E2E_ADMIN_EMAIL: admin@expressmx.com
+          E2E_ADMIN_PASSWORD: Admin123!
+          NODE_ENV: test
+          TURBO_TELEMETRY_DISABLED: 1
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: apps/web/playwright-report/
+          retention-days: 7

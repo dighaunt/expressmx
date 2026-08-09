@@ -1,0 +1,5 @@
+{
+  "extends": "@expressmx/config-typescript/base",
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
+}

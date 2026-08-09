@@ -1,0 +1,21 @@
+{
+  "name": "@expressmx/types",
+  "version": "0.0.1",
+  "private": true,
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@expressmx/validations": "workspace:*"
+  },
+  "devDependencies": {
+    "@expressmx/config-typescript": "workspace:*",
+    "typescript": "^5.7.3"
+  }
+}
