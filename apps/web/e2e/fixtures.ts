@@ -1,9 +1,10 @@
 import { test as base, expect, type Page } from '@playwright/test';
 
-export const ADMIN_EMAIL = process.env.E2E_ADMIN_EMAIL ?? 'admin@expressmx.com';
-export const ADMIN_PASSWORD = process.env.E2E_ADMIN_PASSWORD ?? 'Admin123!';
+export const ADMIN_EMAIL = process.env.E2E_ADMIN_EMAIL ?? '';
+export const ADMIN_PASSWORD = process.env.E2E_ADMIN_PASSWORD ?? '';
 
-export const ADMIN_AVAILABLE = process.env.E2E_ADMIN_AVAILABLE === '1';
+export const ADMIN_AVAILABLE =
+  process.env.E2E_ADMIN_AVAILABLE === '1' && Boolean(ADMIN_EMAIL && ADMIN_PASSWORD);
 
 export async function loginAsAdmin(page: Page): Promise<void> {
   await page.goto('/login');
